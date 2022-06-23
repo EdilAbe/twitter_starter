@@ -9,6 +9,8 @@ export default function TweetBox({
   tweetText,
   setTweetText,
 }) {
+  const isDisabled = tweetText.length === 0 || tweetText.length > 140;
+
   function handleOnTweetTextChange(evt) {
     setTweetText(evt.target.value);
   }
@@ -34,8 +36,11 @@ export default function TweetBox({
 
       <div className="tweet-box-footer">
         <TweetBoxIcons />
-        <TweetCharacterCount />
-        <TweetSubmitButton handleOnSubmit={handleOnSubmit} />
+        <TweetCharacterCount textLength={tweetText.length} />
+        <TweetSubmitButton
+          handleOnSubmit={handleOnSubmit}
+          isDisabled={isDisabled}
+        />
       </div>
     </div>
   );
@@ -52,16 +57,23 @@ export function TweetBoxIcons() {
   );
 }
 
-export function TweetCharacterCount(props) {
-  // ADD CODE HERE
-  return <span></span>;
+export function TweetCharacterCount({ textLength }) {
+  return (
+    <span className={textLength > 140 ? "tweet-length red" : "twee-length"}>
+      {textLength > 0 ? 140 - textLength : ""}{" "}
+    </span>
+  );
 }
 
-export function TweetSubmitButton({ handleOnSubmit }) {
+export function TweetSubmitButton({ handleOnSubmit, isDisabled }) {
   return (
     <div className="tweet-submit">
       <i className="fas fa-plus-circle"></i>
-      <button className="tweet-submit-button" onClick={() => handleOnSubmit()}>
+      <button
+        className="tweet-submit-button"
+        onClick={() => handleOnSubmit()}
+        disabled={isDisabled}
+      >
         Tweet
       </button>
     </div>
